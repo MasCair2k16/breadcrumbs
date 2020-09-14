@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>642442986545-i7lbgvpah5c0q29gpkc33cpdn5cbdc9h.apps.googleusercontent.com</string>
+	<string>691551934598-7b8hkuu78aha3ohn0dr0n0di6fbqsam0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.642442986545-i7lbgvpah5c0q29gpkc33cpdn5cbdc9h</string>
+	<string>com.googleusercontent.apps.691551934598-7b8hkuu78aha3ohn0dr0n0di6fbqsam0</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD1TKpwtJfCgyxJrN_PwatVeEMOhohCdGk</string>
+	<string>AIzaSyBkEhLcxtvWzEE6y_G4-bozXBa1_bIxOuI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>642442986545</string>
+	<string>691551934598</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.m.breadCrumbs</string>
 	<key>PROJECT_ID</key>
-	<string>uniquote-340ba</string>
+	<string>breadcrumbs-54f33</string>
 	<key>STORAGE_BUCKET</key>
-	<string>uniquote-340ba.appspot.com</string>
+	<string>breadcrumbs-54f33.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:642442986545:ios:0850015c97d6856f4dc110</string>
+	<string>1:691551934598:ios:ab4d661f5986b8a8645907</string>
 	<key>DATABASE_URL</key>
-	<string>https://uniquote-340ba.firebaseio.com</string>
+	<string>https://breadcrumbs-54f33.firebaseio.com</string>
 </dict>
 </plist>

@@ -1,3 +1,5 @@
+import 'package:bread_crumbs/authenticate/signin.dart';
+import 'package:bread_crumbs/init/introScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'listofLists.dart';
@@ -11,12 +13,28 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreen extends State<SettingScreen> {
   int _currentIndex = 2;
 
+
+
   Future<void> _signOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
+      await FirebaseAuth.instance.signOut().then((value) => Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        IntroScreen(),
+                  ),
+                ));
+      Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        SigninScreen(),
+                  ),
+                );
     } catch (e) {
       print(e); // TODO: show dialog with error
     }
+
   }
 
   @override

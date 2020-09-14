@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../authenticate/signin.dart';
@@ -18,16 +17,13 @@ class _IntroScreenState extends State<IntroScreen> {
     // Check if user is already signed in
     FirebaseAuth.instance.currentUser().then((res) {
       print(res);
+
       if (res != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ListScreen(uid: res.uid)),
-        );
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => ListScreen(uid: res.uid)));
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SigninScreen()),
-        );
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => SigninScreen()));
       }
     });
   }
