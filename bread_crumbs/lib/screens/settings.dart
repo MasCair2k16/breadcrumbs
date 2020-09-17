@@ -32,7 +32,7 @@ class _SettingScreen extends State<SettingScreen> {
                   ),
                 );
     } catch (e) {
-      print(e); // TODO: show dialog with error
+      print(e); 
     }
 
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/listofLists.dart';
 import '../screens/settings.dart';
 import '../screens/favorites.dart';
+import 'package:bread_crumbs/models/Addlist.dart';
 
 
 class NewListScreen extends StatefulWidget {
@@ -13,6 +14,8 @@ class _NewListScreen extends State<NewListScreen> {
   int _currentIndex = 0;
   String newlistName = "";
   final _formKey = GlobalKey<FormState>();
+  TextEditingController listNameController = TextEditingController();
+  TextEditingController listDescController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,52 +28,68 @@ class _NewListScreen extends State<NewListScreen> {
         backgroundColor: Colors.orange,
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Center(
-            child: Column /*or Column*/ (
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: Column /*or Column*/ (
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
 
-                // Text box
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange, width: 1.0),
-                      ),
-                      hintText: 'Enter List Name',
+              // Text box
+              Padding(
+                padding: EdgeInsets.all(20.0),
+                child: TextFormField(
+                  controller: listNameController,
+                  decoration: InputDecoration(
+                    labelText: "Enter List Name",
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
+                  ),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter List Name';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+              // Text box
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: listDescController,
+                    decoration: InputDecoration(
+                      labelText: "Enter Description",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    // The validator receives the text that the user has entered.
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter a List Name';
+                      if (value.isEmpty) {
+                        return 'Enter a fun description!';
                       }
                       return null;
-                    },
-                    onChanged: (text) {
-                      newlistName = text;
                     },
                   ),
                 ),
 
-                // Submit Button
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        // If the form is valid, display a Snackbar.
-                        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
-                      }},
-                      child: Text('Submit List Name'),
-                  ),
-                )
-              ],
-            ),
+              // Submit Button
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      addlist(listNameController, listDescController).then((value) => Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data'))));
+                      
+                    }},
+                    child: Text('Submit List'),
+                ),
+              )
+            ],
           ),
         ),
       ),
