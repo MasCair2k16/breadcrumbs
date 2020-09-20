@@ -113,10 +113,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
   }
 
   void registerToFb() {
-    firebaseAuth
-        .createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text)
-        .then((result) {
+    firebaseAuth.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((result) {
       dbRef.child(result.user.uid).set({
         "email": emailController.text,
         "name": nameController.text

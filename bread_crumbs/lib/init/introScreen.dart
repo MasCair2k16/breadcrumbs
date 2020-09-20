@@ -14,13 +14,13 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
+    
     // Check if user is already signed in
-    FirebaseAuth.instance.currentUser().then((res) {
-      print(res);
+    FirebaseAuth.instance.currentUser().then((user) {
 
-      if (res != null) {
+      if (user != null) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => ListScreen(uid: res.uid)));
+            builder: (BuildContext context) => ListScreen(uid: user.uid)));
       } else {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (BuildContext context) => SigninScreen()));

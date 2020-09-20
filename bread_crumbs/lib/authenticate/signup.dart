@@ -1,8 +1,9 @@
 import 'package:bread_crumbs/authenticate/signin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
+import '../models/users.dart';
 import '../screens/listofLists.dart';
 
 class EmailSignUp extends StatefulWidget {
@@ -14,7 +15,8 @@ class _EmailSignUpState extends State<EmailSignUp> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  DatabaseReference dbRef = FirebaseDatabase.instance.reference().child("Users");
+  DatabaseReference dbRef =
+      FirebaseDatabase.instance.reference().child("Users");
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -26,19 +28,21 @@ class _EmailSignUpState extends State<EmailSignUp> {
           title: Text("Sign Up"),
           backgroundColor: Colors.orange,
           actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context, PageRouteBuilder( 
-                  pageBuilder: (context, animation1, animation2) => SigninScreen(),
+            FlatButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        SigninScreen(),
                   ),
-              );
-            },
-            child: Text(
-              "Login",
-            ),
-          )
-        ],
+                );
+              },
+              child: Text(
+                "Login",
+              ),
+            )
+          ],
         ),
         body: Form(
             key: _formKey,
@@ -84,7 +88,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
                   },
                 ),
               ),
-
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: TextFormField(
@@ -113,8 +116,9 @@ class _EmailSignUpState extends State<EmailSignUp> {
                     ? CircularProgressIndicator()
                     : RaisedButton(
                         color: Colors.orange,
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState.validate()) {
+                            // Initiate loading symbol
                             setState(() {
                               isLoading = true;
                             });
@@ -127,22 +131,28 @@ class _EmailSignUpState extends State<EmailSignUp> {
             ]))));
   }
 
-  void registerToFb() {
+  // Signup to Firebase
+  Future<void> registerToFb() async {
+    // Create authentication then create user in firestore
     firebaseAuth
         .createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text)
         .then((result) {
-      dbRef.child(result.user.uid).set({
-        "email": emailController.text,
-        "name": nameController.text
-      }).then((res) {
-        isLoading = false;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ListScreen(uid: result.user.uid)),
-        );
-      });
+      adduser(nameController, emailController, result.user.uid);
+      isLoading = false;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ListScreen(uid: result.user.uid)),
+      );
+
+      // If there are any errors
     }).catchError((err) {
+      setState(() {
+        isLoading = false;
+      });
+
+      // Show dialog of error
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -170,4 +180,3 @@ class _EmailSignUpState extends State<EmailSignUp> {
     passwordController.dispose();
   }
 }
-

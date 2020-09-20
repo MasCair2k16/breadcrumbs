@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../screens/listofLists.dart';
 import '../screens/settings.dart';
 import '../screens/favorites.dart';
-import 'package:bread_crumbs/models/Addlist.dart';
+import 'package:bread_crumbs/models/list.dart';
 
 
 class NewListScreen extends StatefulWidget {

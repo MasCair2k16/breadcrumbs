@@ -19,11 +19,18 @@ class _ListScreen extends State<ListScreen> {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Grocery Lists'),
+        title: const Text("Lists"),
         backgroundColor: Colors.orange,
       ),
 
-      body: Center(child: Text("Grocery Lists")),
+      body: Container(
+          padding: EdgeInsets.fromLTRB(10,10,10,0),
+          height: 120,
+          width: double.maxFinite,
+          child: Card(
+            elevation: 10,
+          ),
+        ),
 
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),

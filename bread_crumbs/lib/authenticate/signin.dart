@@ -40,6 +40,7 @@ class _SigninState extends State<SigninScreen> {
             key: _formKey,
             child: SingleChildScrollView(
                 child: Column(children: <Widget>[
+                  // Email Input
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: TextFormField(
@@ -62,6 +63,7 @@ class _SigninState extends State<SigninScreen> {
                   },
                 ),
               ),
+              // Password Input
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: TextFormField(
@@ -84,6 +86,7 @@ class _SigninState extends State<SigninScreen> {
                   },
                 ),
               ),
+              // Submit button
               Padding(
                 padding: EdgeInsets.all(20.0),
                 child: isLoading
@@ -104,6 +107,7 @@ class _SigninState extends State<SigninScreen> {
             ]))));
   }
 
+  // Log into Firebase
   void logInToFb() {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(
@@ -115,6 +119,9 @@ class _SigninState extends State<SigninScreen> {
         MaterialPageRoute(builder: (context) => ListScreen(uid: result.user.uid)),
       );
     }).catchError((err) {
+      setState(() {
+        isLoading = false;
+      });
       print(err.message);
       showDialog(
           context: context,
