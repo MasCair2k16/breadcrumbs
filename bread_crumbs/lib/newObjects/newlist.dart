@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../screens/listofLists.dart';
-import '../screens/settings.dart';
-import '../screens/favorites.dart';
 import 'package:bread_crumbs/models/list.dart';
 
 
@@ -17,7 +14,6 @@ class NewListScreen extends StatefulWidget {
 }
 
 class _NewListScreen extends State<NewListScreen> {
-  int _currentIndex = 0;
   String newlistName = "";
   final _formKey = GlobalKey<FormState>();
   TextEditingController listNameController = TextEditingController();
@@ -25,7 +21,6 @@ class _NewListScreen extends State<NewListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
 
