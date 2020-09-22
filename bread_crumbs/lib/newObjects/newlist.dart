@@ -7,6 +7,11 @@ import 'package:bread_crumbs/models/list.dart';
 
 
 class NewListScreen extends StatefulWidget {
+
+  final String uid;
+
+  NewListScreen({Key key, this.uid}) : super(key: key);
+
   @override
   _NewListScreen createState() => _NewListScreen();
 }
@@ -84,7 +89,15 @@ class _NewListScreen extends State<NewListScreen> {
                 child: RaisedButton(
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      addlist(listNameController, listDescController).then((value) => Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data'))));
+                      addlist(listNameController, listDescController).then((_) => 
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                ListScreen(uid: widget.uid),
+                          ),
+                        )
+                      );
                       
                     }},
                     child: Text('Submit List'),
@@ -93,66 +106,6 @@ class _NewListScreen extends State<NewListScreen> {
             ],
           ),
         ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: textTheme.caption,
-        unselectedLabelStyle: textTheme.caption,
-        onTap: (value) {
-          // Respond to item press.
-          setState(() {
-            _currentIndex = value;
-
-            switch (_currentIndex) {
-              case 0:
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        ListScreen(),
-                  ),
-                );
-                break;
-              case 1:
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        FavoriteScreen(),
-                  ),
-                );
-                break;
-              case 2:
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation1, animation2) =>
-                        SettingScreen(),
-                  ),
-                );
-                break;
-            }
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            title: Text('Grocery Lists'),
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            title: Text('Favorite Items'),
-            icon: Icon(Icons.favorite),
-          ),
-          BottomNavigationBarItem(
-            title: Text('Settings'),
-            icon: Icon(Icons.settings),
-          ),
-        ],
       ),
     );
   }

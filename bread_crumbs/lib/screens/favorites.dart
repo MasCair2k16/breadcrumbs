@@ -4,6 +4,10 @@ import 'settings.dart';
 import '../newObjects/newItem.dart';
 
 class FavoriteScreen extends StatefulWidget {
+
+  final String uid;
+
+  FavoriteScreen({Key key, this.uid}) : super(key: key);
   
    @override
   _FavoriteScreen createState() => _FavoriteScreen();
@@ -58,21 +62,21 @@ class FavoriteScreen extends StatefulWidget {
               case 0:
                 Navigator.pushReplacement(
                 context, PageRouteBuilder( 
-                  pageBuilder: (context, animation1, animation2) => ListScreen(),
+                  pageBuilder: (context, animation1, animation2) => ListScreen(uid: widget.uid),
                   ),
               );
                 break;
               case 1:
                 Navigator.pushReplacement(
                 context, PageRouteBuilder( 
-                  pageBuilder: (context, animation1, animation2) => FavoriteScreen(),
+                  pageBuilder: (context, animation1, animation2) => FavoriteScreen(uid: widget.uid),
                   ),
                 );
                 break;
               case 2:
                 Navigator.pushReplacement(
                 context, PageRouteBuilder( 
-                  pageBuilder: (context, animation1, animation2) => SettingScreen(),
+                  pageBuilder: (context, animation1, animation2) => SettingScreen(uid: widget.uid),
                   ),
                 );
                 break;

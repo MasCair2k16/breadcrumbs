@@ -6,6 +6,11 @@ import 'listofLists.dart';
 import 'favorites.dart';
 
 class SettingScreen extends StatefulWidget {
+
+  final String uid;
+
+  SettingScreen({Key key, this.uid}) : super(key: key);
+
   @override
   _SettingScreen createState() => _SettingScreen();
 }
@@ -73,7 +78,7 @@ class _SettingScreen extends State<SettingScreen> {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) =>
-                        ListScreen(),
+                        ListScreen(uid: widget.uid),
                   ),
                 );
                 break;
@@ -82,7 +87,7 @@ class _SettingScreen extends State<SettingScreen> {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) =>
-                        FavoriteScreen(),
+                        FavoriteScreen(uid: widget.uid),
                   ),
                 );
                 break;
