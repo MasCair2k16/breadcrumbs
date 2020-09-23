@@ -33,14 +33,27 @@ class _ListScreen extends State<ListScreen> {
               : ListView.builder(
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (context, index) {
-
                     DocumentSnapshot data = snapshot.data.documents[index];
+                    // final list = snapshot.data.documents;
+                    DocumentReference docRef = Firestore.instance.collection('users').document(widget.uid).collection('lists').document();
                     return Dismissible(
                       // Dismissed function
-                      onDismissed: (DismissDirection direction) {
-                        setState(() {
-                          // list.removeAt(index);
-                        });
+                      key: UniqueKey(),
+                      onDismissed: (DismissDirection direction) async {
+
+                        await Firestore.instance.runTransaction(
+                            (transaction) async {
+                              await transaction.delete(docRef);
+                            },
+                        );
+                        // setState(() async {
+                        //   snapshot.data.documents[index].data.remove(index);
+                        //   await Firestore.instance.runTransaction(
+                        //     (transaction) async {
+                        //       await transaction.delete(your doc ref here);
+                        //     },
+                        //   );
+                        // });
                       },
                       secondaryBackground: Container(
                         child: Center(
@@ -51,7 +64,6 @@ class _ListScreen extends State<ListScreen> {
                         color: Colors.red,
                       ),
                       background: Container(),
-                      key: UniqueKey(),
                       child: Card(
                         child: Center(
                           child: new Container(
@@ -145,4 +157,5 @@ class _ListScreen extends State<ListScreen> {
       ),
     );
   }
+ 
 }
