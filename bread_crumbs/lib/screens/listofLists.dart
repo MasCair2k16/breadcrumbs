@@ -1,4 +1,3 @@
-import 'package:bread_crumbs/models/list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'favorites.dart';
@@ -35,17 +34,22 @@ class _ListScreen extends State<ListScreen> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot data = snapshot.data.documents[index];
                     // final list = snapshot.data.documents;
-                    DocumentReference docRef = Firestore.instance.collection('users').document(widget.uid).collection('lists').document();
+                    DocumentReference docRef = Firestore.instance
+                        .collection('users')
+                        .document(widget.uid)
+                        .collection('lists')
+                        .document();
                     return Dismissible(
                       // Dismissed function
                       key: UniqueKey(),
                       onDismissed: (DismissDirection direction) async {
 
+                        // Dispose element from list
                         await Firestore.instance.runTransaction(
-                            (transaction) async {
-                              await transaction.delete(docRef);
-                            },
-                        );
+                          (transaction) async {
+                            await transaction.delete(docRef);
+                          },
+                        ).then((index) => null);
                         // setState(() async {
                         //   snapshot.data.documents[index].data.remove(index);
                         //   await Firestore.instance.runTransaction(
@@ -157,5 +161,4 @@ class _ListScreen extends State<ListScreen> {
       ),
     );
   }
- 
 }
