@@ -28,6 +28,6 @@ Future<String> userName() async {
   FirebaseUser user = await grabUser();
   // You can access its data using variable.data['FEILD_NAME']
   DocumentSnapshot variable = await Firestore.instance.collection('users').document(user.uid).get();
-  String name = variable.data['NAME'];
+  String name = variable.data['name'];
   return name;
 }

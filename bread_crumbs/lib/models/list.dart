@@ -2,12 +2,18 @@ import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import './users.dart';
+import 'package:intl/intl.dart'; // for date format
 
-Future<void> addlist(
-    TextEditingController listName, TextEditingController description) async {
+Future<void> addlist(TextEditingController listName, TextEditingController description) async {
+
+  // Timestamp of newlist
+  var now = DateTime.now();
+
+  // Grab current user from firestore
   var firebaseUser = await grabUser();
 
-  Firestore.instance
+    // Create list object in firestore
+    Firestore.instance
       .collection("users")
       .document(firebaseUser.uid)
       .collection("lists")
@@ -15,39 +21,21 @@ Future<void> addlist(
       .setData({
         'listName': listName.text,
         'Description': description.text,
-        'Owner': userName().toString()
+        'Owner': await userName(),
+        'Modified': DateFormat().format(now).toString() // This will return date using the default locale
       })
       .then((value) => (listName.text + " added"))
       .catchError((error) => print("Failed to add user: $error"));
 }
 
-Future<void> removeList(String uid, String listName) async {
+Future<void> removeList(int index) async {
 
-// fires
+  // var firebaseUser = await grabUser();
 
-// firestore.collection('users')..getDocuments().then((snapshot) {
-//   for (DocumentSnapshot ds in snapshot.documents){
-//     ds.reference.delete();
-//   });
-// });
+  // Firestore.instance
+  //     .collection("users")
+  //     .document(firebaseUser.uid)
+  //     .collection('lists')
+  //     .document(listName).delete();
 
-
-  Firestore.instance
-      .collection("users")
-      .document(uid)
-      .collection('lists')
-      .document(listName).delete();
-
-  // Firestore.collection('messages').getDocuments(uid).then((snapshot) {
-  //   for (DocumentSnapshot doc in snapshot.documents) {
-  //     doc.reference.delete();
-  //   }
-  // });
 }
-
-// Future<Map> grabList() async {
-
-//   var firebaseUser = await grabUser();
-//   var query  = await databaseReference.collection('users').document(firebaseUser.uid). collection('lists').getDocuments();
-
-// }
