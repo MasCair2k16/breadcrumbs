@@ -51,14 +51,7 @@ class _ListScreen extends State<ListScreen> {
                             await transaction.delete(snapshot.data.documents[index].reference);
                           },
                         ).then((index) => null);
-                        // setState(() async {
-                        //   snapshot.data.documents[index].data.remove(index);
-                        //   await Firestore.instance.runTransaction(
-                        //     (transaction) async {
-                        //       await transaction.delete(your doc ref here);
-                        //     },
-                        //   );
-                        // });
+                        
                       },
                       secondaryBackground: Container(
                         child: Center(
