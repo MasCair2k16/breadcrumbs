@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'favorites.dart';
 import 'settings.dart';
 import '../newObjects/newlist.dart';
+import 'itemlist.dart';
 
 class ListScreen extends StatefulWidget {
   final String uid;
@@ -16,24 +17,31 @@ class ListScreen extends StatefulWidget {
 class _ListScreen extends State<ListScreen> {
   int _currentIndex = 0;
 
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance
-            .collection('users')
-            .document(widget.uid)
-            .collection('lists')
-            .snapshots(),
-        builder: (context, snapshot) {
-          return !snapshot.hasData
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot data = snapshot.data.documents[index];
-                    // final list = snapshot.data.documents;
+      body: RefreshIndicator(
+        onRefresh: () async {
+          return await Future.delayed(Duration(seconds: 3));
+        },
+        child: StreamBuilder<QuerySnapshot>(
+            stream: Firestore.instance
+                .collection('users')
+                .document(widget.uid)
+                .collection('lists')
+                .snapshots(),
+            builder: (context, snapshot) {
+              return !snapshot.hasData
+                  ? Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (context, index) {
+
+                    // data[] holds info
+                    DocumentSnapshot listData = snapshot.data.documents[index];
+                   
                     DocumentReference docRef = Firestore.instance
                         .collection('users')
                         .document(widget.uid)
@@ -50,8 +58,11 @@ class _ListScreen extends State<ListScreen> {
                             await transaction.delete(docRef);
                             await transaction.delete(snapshot.data.documents[index].reference);
                           },
-                        ).then((index) => null);
-                        
+                          // Display Snackbar once list is deleted
+                        ).then((index) => Scaffold.of(context)
+                          .showSnackBar(new SnackBar( content: new Text("List Deleted")))
+                         );
+
                       },
                       secondaryBackground: Container(
                         child: Center(
@@ -62,15 +73,29 @@ class _ListScreen extends State<ListScreen> {
                         color: Colors.red,
                       ),
                       background: Container(),
+
+                      // Color drops when touched
                       child: Card(
-                        child: Center(
-                          child: new Container(
-                            padding: new EdgeInsets.all(32.0),
-                            child: new Column(
-                              children: <Widget>[
-                                new Text(data['listName']),
-                                new Text(data['Description'])
-                              ],
+                        child: InkWell(
+                          splashColor: Colors.black.withAlpha(30),
+
+                          // Card clicked
+                          onTap: () {
+                             Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ItemListScreen(uid: widget.uid, listData: listData),
+                            ));
+                          },
+                          child: Center(
+                            child: new Container(
+                              padding: new EdgeInsets.all(32.0),
+                              child: new Column(
+                                children: <Widget>[
+                                  new Text(listData['listName']),
+                                  new Text(listData['Description'])
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -79,8 +104,9 @@ class _ListScreen extends State<ListScreen> {
                     );
                   },
                 );
-        },
-      ),
+              },
+            ),
+          ),
 
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -89,7 +115,7 @@ class _ListScreen extends State<ListScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => NewListScreen(uid: widget.uid)),
+                builder: (context) => NewListScreen(uid: widget.uid)),
             );
           }),
 
