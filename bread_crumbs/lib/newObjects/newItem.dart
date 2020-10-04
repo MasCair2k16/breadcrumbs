@@ -1,23 +1,27 @@
+import 'package:bread_crumbs/models/item.dart';
+import 'package:bread_crumbs/screens/itemlist.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../screens/listofLists.dart';
-import '../screens/settings.dart';
-import '../screens/favorites.dart';
 
 class NewItemScreen extends StatefulWidget {
-  
+  final String uid;
+  final DocumentSnapshot listData;
+
+  NewItemScreen({Key key, this.uid, this.listData}) : super(key: key);
+
    @override
   _NewItemScreen createState() => _NewItemScreen();
   }
   
   class _NewItemScreen extends State<NewItemScreen> {
-  
-  int _currentIndex = 1;
 
   @override
   Widget build(BuildContext context) {
 
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController itemNameController = TextEditingController();
+  TextEditingController itemQuantityController = TextEditingController();
 
-    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
 
       appBar: AppBar(
@@ -25,122 +29,78 @@ class NewItemScreen extends StatefulWidget {
         backgroundColor: Colors.orange,
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Form(
+        key: _formKey,
         child: Center(
-          child: Column /*or Column*/( 
+          child: Column /*or Column*/ (
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
 
+              // Text box
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                padding: EdgeInsets.all(20.0),
+                child: TextFormField(
+                  controller: itemNameController,
                   decoration: InputDecoration(
+                    labelText: "Item Name",
                     enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                   ),
-                  hintText: 'Enter Item Name',
-                ),
+                  // The validator receives the text that the user has entered.
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Enter Item Name';
+                    }
+                    return null;
+                  },
                 ),
               ),
 
+              // Text box
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: itemQuantityController,
+                    decoration: InputDecoration(
+                      labelText: "Quantity",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    // The validator receives the text that the user has entered.
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Enter a fun description!';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+
+              // Submit Button
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
-                  ),
-                  hintText: 'Option: Name Brand',
-                  ),
+                child: RaisedButton(
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      additem(itemNameController, itemQuantityController, widget.listData).then((_) => 
+                        Navigator.pushReplacement(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                ItemListScreen(uid: widget.uid, listData: widget.listData,),
+                          ),
+                        )
+                      );
+                      
+                    }},
+                    child: Text('Submit List'),
                 ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
-                  ),
-                  hintText: 'Option: Quantity',
-                ),
-                ),
-              ),
-
-              
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.orange, width: 1.0),
-                  ),
-                  hintText: 'Option: Food Type (ex: Dairy, Meat, Veggies, etc)',
-                  ),
-                ),
-              ),
-
-              
+              )
             ],
           ),
         ),
-      ),  
-
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: textTheme.caption,
-        unselectedLabelStyle: textTheme.caption,
-        onTap: (value) {
-          // Respond to item press.
-          setState(() {
-            _currentIndex = value;
-
-             switch (_currentIndex) {
-              case 0:
-                Navigator.pushReplacement(
-                context, PageRouteBuilder( 
-                  pageBuilder: (context, animation1, animation2) => ListScreen(),
-                  ),
-              );
-                break;
-              case 1:
-                Navigator.pushReplacement(
-                context, PageRouteBuilder( 
-                  pageBuilder: (context, animation1, animation2) => FavoriteScreen(),
-                  ),
-                );
-                break;
-              case 2:
-                Navigator.pushReplacement(
-                context, PageRouteBuilder( 
-                  pageBuilder: (context, animation1, animation2) => SettingScreen(),
-                  ),
-                );
-                break;
-            }
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            title: Text('Grocery Lists'),
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            title: Text('Favorite Items'),
-            icon: Icon(Icons.favorite),
-          ),
-          BottomNavigationBarItem(
-            title: Text('Settings'),
-            icon: Icon(Icons.settings),
-          ),
-        ],
       ),
     );
   }
