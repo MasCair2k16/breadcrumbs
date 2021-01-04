@@ -166,15 +166,15 @@ class _ListScreen extends State<ListScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            title: Text('Grocery Lists'),
+            label: 'Grocery Lists',
             icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            title: Text('Favorite Items'),
+            label: 'Favorite Items',
             icon: Icon(Icons.favorite),
           ),
           BottomNavigationBarItem(
-            title: Text('Settings'),
+            label: 'Settings',
             icon: Icon(Icons.settings),
           ),
         ],

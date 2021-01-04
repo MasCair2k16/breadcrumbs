@@ -1,6 +1,5 @@
 import 'package:bread_crumbs/newObjects/newItem.dart';
 import 'package:flutter/material.dart';
-import 'listofLists.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemListScreen extends StatefulWidget {
